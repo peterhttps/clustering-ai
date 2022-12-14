@@ -30,11 +30,8 @@ model = VGG16()
 extracted_features_model  = Model(inputs = model.inputs, outputs = model.layers[-2].output)
 
 painting_features = {}
-print()
-print("STARTING EXTRACT FEATURE")
-print()
 
-progress_bar = Bar('Processing', max=len(painting_filenames))
+progress_bar = Bar('Extracting features', max=len(painting_filenames))
 for filename in painting_filenames:
     features = extract_features(filename, extracted_features_model)
     painting_features[filename] = features
@@ -51,10 +48,6 @@ transformed_features = pca.transform(features)
 kmeans = KMeans(n_clusters=20, random_state=22)
 kmeans.fit(transformed_features)
 
-print()
-print("STARTING CLUSTERING")
-print()
-
 groups = {}
 for file, cluster in zip(filenames,kmeans.labels_):
     if cluster not in groups.keys():
@@ -65,10 +58,6 @@ for file, cluster in zip(filenames,kmeans.labels_):
    
 sse = []
 list_k = list(range(3, 50))
-
-print()
-print("STARTING ALGUMA COISA")
-print()
 
 for k in list_k:
     km = KMeans(n_clusters=k, random_state=22)
